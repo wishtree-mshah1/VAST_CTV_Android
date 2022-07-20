@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.VAST_CTV_Android" parent="@style/Theme.Leanback" />
+</resources>
