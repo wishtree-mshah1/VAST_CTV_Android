@@ -17,15 +17,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/idExoPlayerVIew" />
-    <com.google.android.exoplayer2.ui.PlayerControlView
+
+    <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/idExoPlayerVIew"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_centerInParent="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:resize_mode="fill"
+        app:use_controller="true" />
 <!--    <LinearLayout-->
 <!--        android:id="@+id/player"-->
 <!--        android:layout_width="match_parent"-->

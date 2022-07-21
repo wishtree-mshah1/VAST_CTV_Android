@@ -25,6 +25,7 @@
         <activity
             android:name=".VASTActivity"
             android:exported="false"
+            android:configChanges="orientation|keyboard|layoutDirection|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
         <activity

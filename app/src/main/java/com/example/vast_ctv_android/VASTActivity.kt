@@ -21,7 +21,7 @@ import java.net.URLEncoder
 
 class VASTActivity : AppCompatActivity() {
 //    lateinit var textView: TextView
-    private lateinit var exoPlayerView: PlayerControlView
+    private lateinit var exoPlayerView: PlayerView
     private lateinit var constraintRoot: ConstraintLayout
     private lateinit var simpleExoPlayer: SimpleExoPlayer
     private lateinit var mediaSource: MediaSource
@@ -54,6 +54,8 @@ class VASTActivity : AppCompatActivity() {
     private fun initPlayer(){
         simpleExoPlayer = SimpleExoPlayer.Builder(this).build()
         simpleExoPlayer.addListener(playerListner)
+        exoPlayerView.setPlayer(simpleExoPlayer)
+
         // Create media source
         createMediaSource()
         simpleExoPlayer.setMediaSource(mediaSource)
@@ -95,17 +97,17 @@ class VASTActivity : AppCompatActivity() {
         override fun onRenderedFirstFrame() {
             super.onRenderedFirstFrame()
 
-//            //If video is in HLS format
-//            if(urlType == URLType.HLS){
-//                // HLS stram doesn't need seekbar
-//                exoPlayerView.useController = false
-//            }
-//
-//            //If video is in MP4 format
-//            if(urlType == URLType.MP4){
-//                // HLS stram doesn't need seekbar
-//                exoPlayerView.useController = true
-//            }
+            //If video is in HLS format
+            if(urlType == URLType.HLS){
+                // HLS stram doesn't need seekbar
+                exoPlayerView.useController = false
+            }
+
+            //If video is in MP4 format
+            if(urlType == URLType.MP4){
+                // HLS stram doesn't need seekbar
+                exoPlayerView.useController = true
+            }
         }
 
         //When player have any error like source error or something
@@ -117,12 +119,13 @@ class VASTActivity : AppCompatActivity() {
 
     // create media resource here playable URL has been declared also set user agent as per the video format
     private fun createMediaSource(){
+
         urlType = URLType.MP4
         // assign url of video which was going to play
-        var url = URLEncoder.encode("https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-for-Testing.mp4");
+        var url = URLEncoder.encode(videoUrl);
         println("urlurl")
         println(url)
-        urlType.url = "https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-for-Testing.mp4"
+        urlType.url = videoUrl
 
         simpleExoPlayer.seekTo(0)
         when(urlType){
@@ -135,7 +138,7 @@ class VASTActivity : AppCompatActivity() {
                     Util.getUserAgent(this,applicationInfo.name)
                 )
                 mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(
-                    MediaItem.fromUri(Uri.parse("https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-for-Testing.mp4"))
+                    MediaItem.fromUri(Uri.parse(urlType.url))
                 )
             }
             //if URL type is HLS
@@ -149,6 +152,13 @@ class VASTActivity : AppCompatActivity() {
                 )
             }
         }
+
+    }
+
+    private fun hideSysytmUI(){
+
+    }
+    private fun showSysytmUI(){
 
     }
 
