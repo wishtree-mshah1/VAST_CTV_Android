@@ -32,9 +32,8 @@ class VASTActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vastactivity)
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            mWebView.getSettings().setMixedContentMode( WebSettings.MIXED_CONTENT_ALWAYS_ALLOW );
-//        }
+
+        // get URL from a home activity using sharedPreference and store it in a videoUrl variable.
         val sharedPreference =  getSharedPreferences("VAST_URL", Context.MODE_PRIVATE)
         videoUrl = sharedPreference.getString("URL","https://thumbs.dreamstime.com/videothumb_large4328/43288790.mp4")
             .toString()
@@ -66,6 +65,7 @@ class VASTActivity : AppCompatActivity() {
     // when activity started or resumed
     override fun onResume() {
         super.onResume()
+        //make video player playable
         simpleExoPlayer.playWhenReady = true
         simpleExoPlayer.play()
     }
@@ -73,18 +73,20 @@ class VASTActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         simpleExoPlayer.pause()
+        //make video player not playable
         simpleExoPlayer.playWhenReady = false
     }
     // when activity stoped
     override fun onStop() {
         super.onStop()
         simpleExoPlayer.pause()
+        //make video player not playable
         simpleExoPlayer.playWhenReady = false
     }
     // when activity destroyed
     override fun onDestroy() {
         super.onDestroy()
-
+        //remove listener of an exoplayer
         simpleExoPlayer.removeListener(playerListner)
         simpleExoPlayer.stop()
         simpleExoPlayer.clearMediaItems()
@@ -128,11 +130,12 @@ class VASTActivity : AppCompatActivity() {
         urlType.url = videoUrl
 
         simpleExoPlayer.seekTo(0)
+
+        //check URL and type and according to URL type it's set controllers
         when(urlType){
 
             //if url type is MP4
             URLType.MP4 ->{
-
                 val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
                     this,
                     Util.getUserAgent(this,applicationInfo.name)
@@ -141,6 +144,7 @@ class VASTActivity : AppCompatActivity() {
                     MediaItem.fromUri(Uri.parse(urlType.url))
                 )
             }
+
             //if URL type is HLS
             URLType.HLS->{
                 val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
@@ -154,15 +158,6 @@ class VASTActivity : AppCompatActivity() {
         }
 
     }
-
-    private fun hideSysytmUI(){
-
-    }
-    private fun showSysytmUI(){
-
-    }
-
-
 }
 //check and define URL type
 enum class URLType(var url: String){
