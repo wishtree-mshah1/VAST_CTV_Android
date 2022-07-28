@@ -12,6 +12,10 @@ import com.google.android.material.textfield.TextInputEditText
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
+/**
+ * Created by Manav Shah on 20/07/2022.
+ */
+
 class HomeActivity : AppCompatActivity() {
     lateinit var  applyButton: Button
     lateinit var  urlEdt: TextInputEditText
