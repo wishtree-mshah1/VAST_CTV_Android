@@ -1,4 +1,4 @@
-package com.example.vast_ctv_android
+package com.example.vast_ctv_android.VAST
 
 import org.xmlpull.v1.XmlPullParser
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VASTActivity"
+    tools:context=".VAST.VASTActivity"
     android:id="@+id/constraintRoot"
     android:background="@android:color/black">
 

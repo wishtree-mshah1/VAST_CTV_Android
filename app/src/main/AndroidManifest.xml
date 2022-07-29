@@ -23,13 +23,13 @@
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name=".VASTActivity"
+            android:name=".VAST.VASTActivity"
             android:exported="false"
             android:configChanges="orientation|keyboard|layoutDirection|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
         <activity
-            android:name=".HomeActivity"
+            android:name=".Activity.HomeActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity

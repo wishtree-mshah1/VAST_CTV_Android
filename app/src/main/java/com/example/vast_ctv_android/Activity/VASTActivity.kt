@@ -1,9 +1,7 @@
-package com.example.vast_ctv_android
+package com.example.vast_ctv_android.VAST
 
 import android.content.Context
 import android.net.Uri
-import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -11,12 +9,9 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.example.vast_ctv_android.videoAd.Defines.TAG
-import com.example.vast_ctv_android.videoAd.NetworkHelper.Companion.getInstance
+import com.example.vast_ctv_android.R
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
@@ -27,12 +22,7 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Log
 import com.google.android.exoplayer2.util.Util
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.ClientProtocolException
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.CloseableHttpResponse
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpGet
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.impl.client.DefaultHttpClient
 import java.io.IOException
 import java.io.InputStream
 import java.net.*
@@ -42,7 +32,7 @@ import java.net.*
  * Created by Manav Shah on 21/07/2022.
  */
 
-class VASTActivity : AppCompatActivity() {
+open class VASTActivity : AppCompatActivity() {
     //    lateinit var textView: TextView
     private lateinit var exoPlayerView: PlayerView
     private lateinit var constraintRoot: ConstraintLayout
@@ -62,6 +52,8 @@ class VASTActivity : AppCompatActivity() {
     private var context: Context? = null
     var mRequestQueue: RequestQueue? = null
     var mStringRequest: StringRequest? = null
+    val app = VASTAdParserUrl()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,24 +65,14 @@ class VASTActivity : AppCompatActivity() {
             "URL",
             "https://thumbs.dreamstime.com/videothumb_large4328/43288790.mp4"
         ).toString()
-        getNativeVideoAdUrl(videoUrl, 0)
+//        getNativeVideoAdUrl(videoUrl, 0)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         findView()
         initPlayer()
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
-        sendAndRequestResponse()
+//        sendAndRequestResponse()
 
-    }
-
-    @Throws(URISyntaxException::class, ClientProtocolException::class, IOException::class)
-    fun getUrlData(url: String?): InputStream? {
-        val client = DefaultHttpClient()
-        val method = HttpGet(URI(url))
-        val res: CloseableHttpResponse? = client.execute(method)
-        println("res?.getEntity()?.getContent()")
-        println(res?.getEntity()?.getContent())
-        return res?.getEntity()?.getContent()
     }
 
     // find exoplayerview from XML
@@ -118,6 +100,7 @@ class VASTActivity : AppCompatActivity() {
         createMediaSource()
         simpleExoPlayer.setMediaSource(mediaSource)
         simpleExoPlayer.prepare()
+
     }
 
     // Lifecycle
@@ -222,68 +205,67 @@ class VASTActivity : AppCompatActivity() {
     }
 
 
-
-    private fun sendAndRequestResponse() {
-        //RequestQueue initialized
-
-        mRequestQueue = Volley.newRequestQueue(this)
-        //String Request initialized
-        mStringRequest = StringRequest(
-            Request.Method.GET, DEFAULT_NATIVE_VIDEO_AD_URL,
-            { response ->
-                val parser = VastParser()
-                try {
-                    println("responseee")
-                    val a = parser.parse(DEFAULT_NATIVE_VIDEO_AD_URL)
-                    val b = VASTParserAsyncTask()
-                    println("yeeeeee")
-                    b.execute(response)
-                    println(b)
-
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    null
-                }
-
-            }) { error -> Log.i(TAG, "Error :$error") }
-        mRequestQueue!!.add(mStringRequest)
-        println("mRequestQueue")
-        println(mRequestQueue)
-    }
-
-    private inner class VASTParserAsyncTask : AsyncTask<String?, Void?, String>() {
-        override fun doInBackground(vararg params: String?): String {
-            val parser = VastParser()
-            try {
-                params[0]?.let { parser.parse(it) }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                null
-            }
-            return params.toString()
-        }
-    }
-
-    fun getNativeVideoAdUrl(adUrl: String, index: Int): String {
-        AD_VAST_VERSION_4_2 = getAdUrl(adUrl, index, DEFAULT_NATIVE_VIDEO_AD_URL)
-        println(AD_VAST_VERSION_4_2)
-        return AD_VAST_VERSION_4_2
-    }
-
-    private fun getAdUrl(adUrl: String, index: Int, defaultStaticURL: String): String {
-        return getAdUrl(adUrl, defaultStaticURL)
-    }
-
-    fun getAdUrl(adUrl: String?, defaultAdUrl: String): String {
-        println(adUrl)
-        println(defaultAdUrl)
-
-        return if (videoUrl.isEmpty()) adUrl!! else defaultAdUrl
-    }
-
-    fun setDefaultURLs(baseURL: String) {
-        DEFAULT_NATIVE_VIDEO_AD_URL = "$baseURL/vast/vast42-placement1.xml"
-    }
+//    private fun sendAndRequestResponse() {
+//        //RequestQueue initialized
+//
+//        mRequestQueue = Volley.newRequestQueue(this)
+//        //String Request initialized
+//        mStringRequest = StringRequest(
+//            Request.Method.GET, DEFAULT_NATIVE_VIDEO_AD_URL,
+//            { response ->
+//                val parser = VastParser()
+//                try {
+//                    println("responseee")
+//                    val a = parser.parse(DEFAULT_NATIVE_VIDEO_AD_URL)
+//                    val b = VASTParserAsyncTask()
+//                    println("yeeeeee")
+//                    b.execute(response)
+//                    println(b)
+//
+//                } catch (e: IOException) {
+//                    e.printStackTrace()
+//                    null
+//                }
+//
+//            }) { error -> Log.i(TAG, "Error :$error") }
+//        mRequestQueue!!.add(mStringRequest)
+//        println("mRequestQueue")
+//        println(mRequestQueue)
+//    }
+//
+//    private inner class VASTParserAsyncTask : AsyncTask<String?, Void?, String>() {
+//        override fun doInBackground(vararg params: String?): String {
+//            val parser = VastParser()
+//            try {
+//                params[0]?.let { parser.parse(it) }
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//                null
+//            }
+//            return params.toString()
+//        }
+//    }
+//
+//    fun getNativeVideoAdUrl(adUrl: String, index: Int): String {
+//        AD_VAST_VERSION_4_2 = getAdUrl(adUrl, index, DEFAULT_NATIVE_VIDEO_AD_URL)
+//        println(AD_VAST_VERSION_4_2)
+//        return AD_VAST_VERSION_4_2
+//    }
+//
+//    private fun getAdUrl(adUrl: String, index: Int, defaultStaticURL: String): String {
+//        return getAdUrl(adUrl, defaultStaticURL)
+//    }
+//
+//    fun getAdUrl(adUrl: String?, defaultAdUrl: String): String {
+//        println(adUrl)
+//        println(defaultAdUrl)
+//
+//        return if (videoUrl.isEmpty()) adUrl!! else defaultAdUrl
+//    }
+//
+//    fun setDefaultURLs(baseURL: String) {
+//        DEFAULT_NATIVE_VIDEO_AD_URL = "$baseURL/vast/vast42-placement1.xml"
+//    }
 }
 
 //check and define URL type

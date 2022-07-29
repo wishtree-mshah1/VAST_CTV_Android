@@ -1,16 +1,18 @@
-package com.example.vast_ctv_android
+package com.example.vast_ctv_android.VAST
 
 import org.xmlpull.v1.XmlPullParser
 
-class VASTResponseParser : VASTBaseParser() {
+class VASTResponseParser() : VASTBaseParser() {
     val response = VASTResponse()
     override fun createParser(elementName: String, parser: XmlPullParser?): VASTNodeParser? {
         return if (AD == elementName) {
-            null
+            VASTAdParserUrl()
         } else null
     }
 
     override fun didEndElement(elementName: String, value: String?, parser: VASTNodeParser?) {
+        println("valueeeeee")
+        println(value)
     }
 
     companion object {

@@ -34,6 +34,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.vast_ctv_android.Activity.HomeActivity
 
 /**
  * Loads a grid of cards with movies to browse.
