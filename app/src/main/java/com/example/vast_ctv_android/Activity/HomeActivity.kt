@@ -31,6 +31,7 @@ import java.util.regex.Pattern
 
 class HomeActivity : AppCompatActivity() {
     lateinit var  applyButton: Button
+    lateinit var  loadButton: Button
     lateinit var  urlEdt: TextInputEditText
     private lateinit var sharedPreferences: SharedPreferences
     var VAST_VERSION = 4.2
@@ -79,9 +80,11 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         applyButton = findViewById(R.id.applyButton)
+        loadButton = findViewById(R.id.loadButton)
         urlEdt = findViewById(R.id.urlEdt)
 
-        applyButton.setOnClickListener(View.OnClickListener {
+
+        loadButton.setOnClickListener(View.OnClickListener {
              vastUrl= urlEdt.text.toString()
             println("vastUrl")
             println(vastUrl)
@@ -107,7 +110,15 @@ class HomeActivity : AppCompatActivity() {
             editor.commit()
 
         })
+
+        applyButton.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this@HomeActivity, VASTActivity::class.java)
+            startActivity(intent)
+        })
     }
+
+
+
 
     private fun sendAndRequestResponse() {
         //RequestQueue initialized
