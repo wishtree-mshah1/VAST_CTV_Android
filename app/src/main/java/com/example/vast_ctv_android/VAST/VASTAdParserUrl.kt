@@ -22,6 +22,11 @@ class VASTAdParserUrl() : VASTBaseParser() {
         }
     }
 
+    fun getdata(): String {
+        var element = myArrayList.get(0)
+        return element
+    }
+
     companion object {
         private const val MEDIAFILE = "MediaFile"
     }

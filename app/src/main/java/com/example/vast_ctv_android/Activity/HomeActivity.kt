@@ -16,6 +16,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.vast_ctv_android.R
 import com.example.vast_ctv_android.VAST.VASTActivity
+import com.example.vast_ctv_android.VAST.VASTAdParserUrl
+import com.example.vast_ctv_android.VAST.VASTAdParserUrlTemp
 import com.example.vast_ctv_android.VAST.VastParser
 import com.example.vast_ctv_android.videoAd.Defines
 import com.google.android.exoplayer2.util.Log
@@ -48,6 +50,7 @@ class HomeActivity : AppCompatActivity() {
     var mStringRequest: StringRequest? = null
     var vastUrl: String? = null
 
+    val objVASTUrlParser = VASTAdParserUrl()
 
     fun isValidURL(url: String?): Boolean {
         // Regex to check valid URL
@@ -89,8 +92,26 @@ class HomeActivity : AppCompatActivity() {
             println("vastUrl")
             println(vastUrl)
             if (vastUrl!!.length == 0) {
-                vastUrl = "https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-for-Testing.mp4"
+                sendAndRequestResponse()
+//                vastUrl = "https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-for-Testing.mp4"
             }
+
+            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+
+        })
+
+        applyButton.setOnClickListener(View.OnClickListener {
+
+            println("oooooooooooooo")
+            vastUrl = objVASTUrlParser.getdata()
+            println(vastUrl)
+
+            val sharedPreference =  getSharedPreferences("VAST_URL",Context.MODE_PRIVATE)
+            var editor = sharedPreference.edit()
+            editor.putString("URL", vastUrl.toString())
+            editor.commit()
+
             if (isValidURL(vastUrl) == true) {
                 val intent = Intent(this@HomeActivity, VASTActivity::class.java)
                 startActivity(intent)
@@ -100,20 +121,6 @@ class HomeActivity : AppCompatActivity() {
                 toast.show()
             }
 
-            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-            StrictMode.setThreadPolicy(policy)
-
-            sendAndRequestResponse()
-            val sharedPreference =  getSharedPreferences("VAST_URL",Context.MODE_PRIVATE)
-            var editor = sharedPreference.edit()
-            editor.putString("URL", vastUrl.toString())
-            editor.commit()
-
-        })
-
-        applyButton.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@HomeActivity, VASTActivity::class.java)
-            startActivity(intent)
         })
     }
 
