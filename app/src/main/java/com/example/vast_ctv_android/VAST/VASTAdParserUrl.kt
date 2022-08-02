@@ -1,33 +1,32 @@
 package com.example.vast_ctv_android.VAST
 
-import com.example.vast_ctv_android.videoAd.Ad
 import org.xmlpull.v1.XmlPullParser
+
+/**
+ * Created by Manav Shah on 25/07/22 - 14: 48: 03.
+ * Email :- manav.shah@wishtreetech.com
+ */
 
 class VASTAdParserUrl() : VASTBaseParser() {
 
+    //For store Metadata
     val myArrayList = ArrayList<String>()
-
     override fun createParser(elementName: String, parser: XmlPullParser?): VASTNodeParser? {
         if (MEDIAFILE == elementName) {
-            println("yeee mil gaya")
+            println("URL GOT")
         }
         return null
     }
 
     override fun didEndElement(elementName: String, value: String?, parser: VASTNodeParser?) {
         if (MEDIAFILE == elementName) {
-            println("eeeeeeeeeeeeee")
-            println(value)
+            //To add Mediafile URL into arrayList
             myArrayList.add(value.toString())
         }
-    }
-
-    fun getdata(): String {
-        var element = myArrayList.get(0)
-        return element
     }
 
     companion object {
         private const val MEDIAFILE = "MediaFile"
     }
+
 }

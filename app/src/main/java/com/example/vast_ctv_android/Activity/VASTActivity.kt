@@ -30,30 +30,17 @@ import java.net.*
 
 /**
  * Created by Manav Shah on 21/07/2022.
+ * Email :- manav.shah@wishtreetech.com
  */
 
 open class VASTActivity : AppCompatActivity() {
-    //    lateinit var textView: TextView
+
     private lateinit var exoPlayerView: PlayerView
     private lateinit var constraintRoot: ConstraintLayout
     private lateinit var simpleExoPlayer: SimpleExoPlayer
     private lateinit var mediaSource: MediaSource
     private lateinit var urlType: URLType
     private lateinit var videoUrl: String
-    var VAST_VERSION = 4.2
-    var AD_VAST_VERSION_4_2 = ""
-    val HOSTNAME_URL = "http://mobile-static.adsafeprotected.com"
-    val CREATIVE_VERSION = "omid-v1/certification-v013"
-    val VERSIONED_CREATIVE_URL = HOSTNAME_URL + "/static/creative/" + CREATIVE_VERSION
-    var DEFAULT_NATIVE_VIDEO_AD_URL = "$VERSIONED_CREATIVE_URL/vast/vast42-placement1.xml"
-    var connection: HttpURLConnection? = null
-    var items = ArrayList<String>()
-    var headlines: ArrayList<String> = ArrayList()
-    private var context: Context? = null
-    var mRequestQueue: RequestQueue? = null
-    var mStringRequest: StringRequest? = null
-    val app = VASTAdParserUrl()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +52,12 @@ open class VASTActivity : AppCompatActivity() {
             "URL",
             "https://thumbs.dreamstime.com/videothumb_large4328/43288790.mp4"
         ).toString()
-//        getNativeVideoAdUrl(videoUrl, 0)
+
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         findView()
         initPlayer()
+
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 //        sendAndRequestResponse()
@@ -80,16 +69,8 @@ open class VASTActivity : AppCompatActivity() {
         constraintRoot = findViewById(R.id.constraintRoot)
         exoPlayerView = findViewById(R.id.idExoPlayerVIew)
     }
-    fun getInputStream(url: URL): InputStream? {
-        return try {
-            url.openConnection().getInputStream()
-        } catch (e: IOException) {
-            null
-        }
-    }
-    fun heads(): ArrayList<String> {
-        return headlines
-    }
+
+
     // Initialize player and create media source
     private fun initPlayer() {
         simpleExoPlayer = SimpleExoPlayer.Builder(this).build()
@@ -204,68 +185,6 @@ open class VASTActivity : AppCompatActivity() {
 
     }
 
-
-//    private fun sendAndRequestResponse() {
-//        //RequestQueue initialized
-//
-//        mRequestQueue = Volley.newRequestQueue(this)
-//        //String Request initialized
-//        mStringRequest = StringRequest(
-//            Request.Method.GET, DEFAULT_NATIVE_VIDEO_AD_URL,
-//            { response ->
-//                val parser = VastParser()
-//                try {
-//                    println("responseee")
-//                    val a = parser.parse(DEFAULT_NATIVE_VIDEO_AD_URL)
-//                    val b = VASTParserAsyncTask()
-//                    println("yeeeeee")
-//                    b.execute(response)
-//                    println(b)
-//
-//                } catch (e: IOException) {
-//                    e.printStackTrace()
-//                    null
-//                }
-//
-//            }) { error -> Log.i(TAG, "Error :$error") }
-//        mRequestQueue!!.add(mStringRequest)
-//        println("mRequestQueue")
-//        println(mRequestQueue)
-//    }
-//
-//    private inner class VASTParserAsyncTask : AsyncTask<String?, Void?, String>() {
-//        override fun doInBackground(vararg params: String?): String {
-//            val parser = VastParser()
-//            try {
-//                params[0]?.let { parser.parse(it) }
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//                null
-//            }
-//            return params.toString()
-//        }
-//    }
-//
-//    fun getNativeVideoAdUrl(adUrl: String, index: Int): String {
-//        AD_VAST_VERSION_4_2 = getAdUrl(adUrl, index, DEFAULT_NATIVE_VIDEO_AD_URL)
-//        println(AD_VAST_VERSION_4_2)
-//        return AD_VAST_VERSION_4_2
-//    }
-//
-//    private fun getAdUrl(adUrl: String, index: Int, defaultStaticURL: String): String {
-//        return getAdUrl(adUrl, defaultStaticURL)
-//    }
-//
-//    fun getAdUrl(adUrl: String?, defaultAdUrl: String): String {
-//        println(adUrl)
-//        println(defaultAdUrl)
-//
-//        return if (videoUrl.isEmpty()) adUrl!! else defaultAdUrl
-//    }
-//
-//    fun setDefaultURLs(baseURL: String) {
-//        DEFAULT_NATIVE_VIDEO_AD_URL = "$baseURL/vast/vast42-placement1.xml"
-//    }
 }
 
 //check and define URL type
