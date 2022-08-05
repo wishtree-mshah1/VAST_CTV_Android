@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser
  */
 
 
-abstract class VASTBaseParser : VASTNodeParser {
+abstract class VASTBaseParser : VASTNodeParser,VASTActivity() {
     private var currentElement: String? = null
     private var currentParser: VASTNodeParser? = null
     override fun didStartElement(elementName: String, parser: XmlPullParser?) {
@@ -31,12 +31,6 @@ abstract class VASTBaseParser : VASTNodeParser {
         } else if (currentParser != null) {
             currentParser?.didEndElement(elementName, value)
         }
-    }
-
-    protected fun readIntAttr(parser: XmlPullParser, attrName: String, index: Int): Int? {
-        return if (parser.getAttributeName(index) == attrName) {
-            parser.getAttributeValue(index).toInt()
-        } else null
     }
 
     protected abstract fun createParser(elementName: String, parser: XmlPullParser?): VASTNodeParser?

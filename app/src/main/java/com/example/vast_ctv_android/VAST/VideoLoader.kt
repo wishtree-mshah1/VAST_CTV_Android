@@ -1,14 +1,11 @@
 package com.example.vast_ctv_android.VAST
 
-import android.content.Intent
 import android.os.AsyncTask
 import android.util.Xml
-import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.vast_ctv_android.Activity.HomeActivity
 import com.google.android.exoplayer2.util.Log
 import com.integralads.omid.iassdk.videoad.vast.VASTResponse
 import org.xmlpull.v1.XmlPullParser
@@ -39,9 +36,18 @@ class VideoLoader(): VASTBaseParser(),videoData {
     var mRequestQueue: RequestQueue? = null
     var mStringRequest: StringRequest? = null
     private var buffer: String? = null
+    val response = VASTResponse()
+    var url: String = ""
 
+    fun loadUrl(url: String, homeActivity: VASTActivity){
+        sendAndRequestResponse(url,homeActivity)
 
-    fun sendAndRequestResponse(DEFAULT_NATIVE_VIDEO_AD_URL: String, homeActivity: VASTActivity) {
+    }
+
+    fun sendAndRequestResponse(
+        DEFAULT_NATIVE_VIDEO_AD_URL: String,
+        homeActivity: VASTActivity
+    ) {
         //RequestQueue initialized
 
         mRequestQueue = Volley.newRequestQueue(homeActivity)
@@ -69,7 +75,6 @@ class VideoLoader(): VASTBaseParser(),videoData {
     // This block of code perform Async Task it parse the url to parser and get the video URL after parsing and set it as a Video URL
     private inner class VASTParserAsyncTask : AsyncTask<String?, Void?, VASTResponse?>() {
         protected override fun doInBackground(vararg params: String?): VASTResponse? {
-//            val parser = VastParser()
             return try {
                 params[0]?.let { parse(it) }
             } catch (e: IOException) {
@@ -87,7 +92,6 @@ class VideoLoader(): VASTBaseParser(),videoData {
     fun parse(xml: String): VASTResponse {
         val inputStream: InputStream =
             ByteArrayInputStream(xml.toByteArray(Charset.forName("UTF-8")))
-        val responseParser = VASTResponseParser()
 
         try {
             val parser = Xml.newPullParser()
@@ -100,7 +104,7 @@ class VideoLoader(): VASTBaseParser(),videoData {
         } finally {
             inputStream.close()
         }
-        return responseParser.response
+        return response
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
@@ -144,6 +148,8 @@ class VideoLoader(): VASTBaseParser(),videoData {
 
     override fun urlData(urlData: String) {
         println(urlData)
+        url = urlData
+        dataArary()
     }
 
 
@@ -151,6 +157,7 @@ class VideoLoader(): VASTBaseParser(),videoData {
         if (VideoLoader.MEDIAFILE == elementName) {
             urlData(value.toString())
             println("eeeeeeee")
+
         }
 
     }
@@ -158,4 +165,5 @@ class VideoLoader(): VASTBaseParser(),videoData {
     companion object {
         private const val MEDIAFILE = "MediaFile"
     }
+
 }

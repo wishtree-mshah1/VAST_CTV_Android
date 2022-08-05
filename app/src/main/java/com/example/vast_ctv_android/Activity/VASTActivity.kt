@@ -80,7 +80,8 @@ open class VASTActivity : AppCompatActivity(),videoData {
         val extras = intent.extras
         VASTURL = extras?.getString("URL")
 
-        VideoLoader().sendAndRequestResponse(VASTURL.toString(),this)
+        VideoLoader().loadUrl(VASTURL.toString(), this)
+
 
         videoUrl = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4"
         findView()
@@ -226,7 +227,9 @@ open class VASTActivity : AppCompatActivity(),videoData {
     }
 
     override fun urlData(urlData: String) {
+        println("urlData")
         println(urlData)
+
     }
 
 }

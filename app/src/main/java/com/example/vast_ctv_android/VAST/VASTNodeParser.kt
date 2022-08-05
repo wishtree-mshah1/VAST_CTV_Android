@@ -8,8 +8,6 @@ import org.xmlpull.v1.XmlPullParser
 
 //Interface for getting parsed data and it was extracted with many parsing classes
 interface VASTNodeParser {
-
-
     fun didStartElement(elementName: String, parser: XmlPullParser?)
     fun didEndElement(elementName: String, value: String?)
 }

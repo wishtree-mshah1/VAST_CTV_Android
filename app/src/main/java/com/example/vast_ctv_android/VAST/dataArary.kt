@@ -12,6 +12,9 @@ import java.util.ArrayList
  * class dataArary extends class for a
  **/
 
-class dataArary {
+class dataArary: videoData {
     val data: ArrayList<String> = ArrayList()
+    override fun urlData(urlData: String) {
+
+    }
 }
