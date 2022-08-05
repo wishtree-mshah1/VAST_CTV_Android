@@ -11,7 +11,7 @@ class VASTResponseParser() : VASTBaseParser() {
     val response = VASTResponse()
     override fun createParser(elementName: String, parser: XmlPullParser?): VASTNodeParser? {
         return if (AD == elementName) {
-            VASTAdParserUrl()
+            null
         } else null
     }
 

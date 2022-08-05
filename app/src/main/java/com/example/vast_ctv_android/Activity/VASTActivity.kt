@@ -1,6 +1,5 @@
 package com.example.vast_ctv_android.VAST
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
@@ -9,8 +8,6 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.StringRequest
 import com.example.vast_ctv_android.R
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
@@ -23,10 +20,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import org.xmlpull.v1.XmlPullParser
-import java.io.IOException
-import java.io.InputStream
-import java.net.*
+import java.net.URLEncoder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -35,7 +29,8 @@ import java.util.regex.Pattern
  * Created by Manav Shah on 21/07/2022.
  */
 
-open class VASTActivity : AppCompatActivity(),metaData {
+
+open class VASTActivity : AppCompatActivity(),videoData {
 
     private lateinit var exoPlayerView: PlayerView
     private lateinit var constraintRoot: ConstraintLayout
@@ -43,6 +38,7 @@ open class VASTActivity : AppCompatActivity(),metaData {
     private lateinit var mediaSource: MediaSource
     private lateinit var urlType: URLType
     private var videoUrl: String? = null
+    private var VASTURL: String? = null
 
     fun isValidURL(url: String?): Boolean {
         // Regex to check valid URL
@@ -81,19 +77,21 @@ open class VASTActivity : AppCompatActivity(),metaData {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vastactivity)
 
-        // get URL from a home activity using sharedPreference and store it in a videoUrl variable.
-        val sharedPreference = getSharedPreferences("VAST_URL", Context.MODE_PRIVATE)
+        val extras = intent.extras
+        VASTURL = extras?.getString("URL")
 
+        VideoLoader().sendAndRequestResponse(VASTURL.toString(),this)
 
-        videoUrl = ""
+        videoUrl = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4"
+        findView()
+        initPlayer()
 
         if (videoUrl != null) {
             if (isValidURL(videoUrl) ==  false){
                 Toast.makeText(this@VASTActivity, "URL is not in proper format", Toast.LENGTH_SHORT).show()
             }
             else{
-                findView()
-                initPlayer()
+
             }
         }
         else{
@@ -113,7 +111,6 @@ open class VASTActivity : AppCompatActivity(),metaData {
         constraintRoot = findViewById(R.id.constraintRoot)
         exoPlayerView = findViewById(R.id.idExoPlayerVIew)
     }
-
 
     // Initialize player and create media source
     private fun initPlayer() {
@@ -152,6 +149,7 @@ open class VASTActivity : AppCompatActivity(),metaData {
         //make video player not playable
         simpleExoPlayer.playWhenReady = false
     }
+
     // when activity destroyed
     override fun onDestroy() {
         super.onDestroy()
@@ -228,11 +226,8 @@ open class VASTActivity : AppCompatActivity(),metaData {
     }
 
     override fun urlData(urlData: String) {
-        videoUrl = urlData
-        println("videoUrl")
-        println(videoUrl)
+        println(urlData)
     }
-
 
 }
 

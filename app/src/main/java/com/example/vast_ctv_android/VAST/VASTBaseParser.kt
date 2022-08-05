@@ -7,7 +7,7 @@ import org.xmlpull.v1.XmlPullParser
  */
 
 
-abstract class VASTBaseParser : VASTNodeParser,metaData {
+abstract class VASTBaseParser : VASTNodeParser {
     private var currentElement: String? = null
     private var currentParser: VASTNodeParser? = null
     override fun didStartElement(elementName: String, parser: XmlPullParser?) {
@@ -21,7 +21,9 @@ abstract class VASTBaseParser : VASTNodeParser,metaData {
 
     override fun didEndElement(elementName: String, value: String?) {
         didEndElement(elementName, value, currentParser)
-        urlData(value.toString())
+        if (value.toString() != ""){
+
+        }
         if (currentElement != null && currentElement == elementName) {
             didEndElement(elementName, value, currentParser)
             currentParser = null
