@@ -59,14 +59,7 @@ class VastParser {
                     //one by one get value with there tag name
                     responseParser.didEndElement(tagname, buffer!!)
                     println(buffer)
-//                    response.adsData.add(buffer.toString())
-//                    println("response.ads?.adsData")
-//
-//                    index++
-                    //if tag name is MediaFile then set buffer value to url variable
-//                    if (tagname == "MediaFile"){
-//                        url = buffer.toString()
-//                    }
+
                     buffer = null
                 }
                 else -> {

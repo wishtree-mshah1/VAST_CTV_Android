@@ -6,7 +6,7 @@ import org.xmlpull.v1.XmlPullParser
  * Created by Manav Shah on 25/07/22 - 14: 48: 03.
  */
 
-class VASTAdParserUrl() : VASTBaseParser(), LinearAdMediaData {
+class VASTAdParserUrl() : VASTBaseParser() {
 
     //For store Metadata
     val myArrayList = ArrayList<String>()
@@ -17,21 +17,23 @@ class VASTAdParserUrl() : VASTBaseParser(), LinearAdMediaData {
         return null
     }
 
+
+
     override fun didEndElement(elementName: String, value: String?, parser: VASTNodeParser?) {
         if (MEDIAFILE == elementName) {
             //To add Mediafile URL into arrayList
             myArrayList.add(value.toString())
-            AdMediaData(value.toString())
+
         }
 
     }
-
+    override fun urlData(urlData: String) {
+        println(urlData)
+    }
     companion object {
         private const val MEDIAFILE = "MediaFile"
     }
 
-    override var videoUrll: String?
-        get() = TODO("Not yet implemented")
-        set(value) {}
+
 
 }

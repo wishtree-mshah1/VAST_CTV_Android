@@ -15,6 +15,10 @@ class VASTResponseParser() : VASTBaseParser() {
         } else null
     }
 
+    override fun urlData(urlData: String) {
+        null
+    }
+
     override fun didEndElement(elementName: String, value: String?, parser: VASTNodeParser?) {
         println("valueeeeee")
         println(value)

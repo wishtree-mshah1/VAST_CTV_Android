@@ -23,6 +23,7 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
 import java.io.InputStream
 import java.net.*
@@ -34,7 +35,7 @@ import java.util.regex.Pattern
  * Created by Manav Shah on 21/07/2022.
  */
 
-open class VASTActivity : AppCompatActivity() {
+open class VASTActivity : AppCompatActivity(),metaData {
 
     private lateinit var exoPlayerView: PlayerView
     private lateinit var constraintRoot: ConstraintLayout
@@ -84,7 +85,7 @@ open class VASTActivity : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("VAST_URL", Context.MODE_PRIVATE)
 
 
-        videoUrl = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4"
+        videoUrl = ""
 
         if (videoUrl != null) {
             if (isValidURL(videoUrl) ==  false){
@@ -151,7 +152,6 @@ open class VASTActivity : AppCompatActivity() {
         //make video player not playable
         simpleExoPlayer.playWhenReady = false
     }
-
     // when activity destroyed
     override fun onDestroy() {
         super.onDestroy()
@@ -225,6 +225,12 @@ open class VASTActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun urlData(urlData: String) {
+        videoUrl = urlData
+        println("videoUrl")
+        println(videoUrl)
     }
 
 
