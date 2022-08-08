@@ -26,20 +26,20 @@ import java.nio.charset.Charset
  * Created by Manav Shah on 05/08/22 - 15: 34: 31.
  */
 
-interface videoData{
-    fun urlData(urlData: String)
-}
 
 
-class VideoLoader(): VASTBaseParser(),videoData {
-
+class VideoLoader(): VASTBaseParser() {
+    interface VideoAdLoaderListener {
+        fun loadedVASTResponse(reponse: VASTResponse?)
+        fun failedLoadVASTResponse()
+    }
     var mRequestQueue: RequestQueue? = null
     var mStringRequest: StringRequest? = null
     private var buffer: String? = null
-    val response = VASTResponse()
-    var url: String = ""
+    private var listener: VideoAdLoaderListener? = null
 
-    fun loadUrl(url: String, homeActivity: VASTActivity){
+    fun loadUrl(url: String, homeActivity: VASTActivity, listener: VideoAdLoaderListener?){
+        this.listener = listener
         sendAndRequestResponse(url,homeActivity)
 
     }
@@ -61,6 +61,7 @@ class VideoLoader(): VASTBaseParser(),videoData {
                     val a = parse(DEFAULT_NATIVE_VIDEO_AD_URL)
                     val b = VASTParserAsyncTask()
                     b.execute(response)
+                    println(b)
 
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -70,6 +71,11 @@ class VideoLoader(): VASTBaseParser(),videoData {
             }) { error -> Log.i("Error", "Error :$error") }
 
         mRequestQueue!!.add(mStringRequest)
+    }
+    private fun handleVASTResponse(response: VASTResponse?) {
+        if (response != null) {
+            listener?.loadedVASTResponse(response)
+        }
     }
 
     // This block of code perform Async Task it parse the url to parser and get the video URL after parsing and set it as a Video URL
@@ -84,6 +90,9 @@ class VideoLoader(): VASTBaseParser(),videoData {
         }
 
         override fun onPostExecute(response: VASTResponse?) {
+            handleVASTResponse(response)
+            println("response?.ads?.get(0)")
+            println(response?.ads?.get(0))
 
         }
     }
@@ -92,38 +101,39 @@ class VideoLoader(): VASTBaseParser(),videoData {
     fun parse(xml: String): VASTResponse {
         val inputStream: InputStream =
             ByteArrayInputStream(xml.toByteArray(Charset.forName("UTF-8")))
+        val responseParser = VASTResponseParser()
 
         try {
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(inputStream, null)
             //called do parse method and after parsing MediaFile the URL was stored in adurl variable and it returns this url to asyncTask and set the url for a video
-            doParse(parser)
+            doParse(parser,responseParser)
         } catch (e: XmlPullParserException) {
             e.printStackTrace()
         } finally {
             inputStream.close()
         }
-        return response
+        return responseParser.response
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    fun doParse(parser: XmlPullParser) {
+    fun doParse(parser: XmlPullParser,responseParser: VASTResponseParser) {
         var eventType = parser.eventType
         while (eventType != XmlPullParser.END_DOCUMENT) {
             //tagname is for store a tags name temporary
-            val tagname = parser.name
+                val tagname = parser.name
 
             when (eventType) {
 
                 XmlPullParser.START_TAG -> {
                     buffer = null
-                    didStartElement(tagname, parser)
+                    responseParser.didStartElement(tagname, parser)
                 }
                 XmlPullParser.TEXT -> buffer = parser.text.trim { it <= ' ' }
                 XmlPullParser.END_TAG -> {
                     //one by one get value with there tag name
-                    didEndElement(tagname, buffer!!)
+                    responseParser.didEndElement(tagname, buffer!!)
                     println(buffer)
                     if (tagname == "MediaFile") {
 
@@ -146,16 +156,9 @@ class VideoLoader(): VASTBaseParser(),videoData {
         return null
     }
 
-    override fun urlData(urlData: String) {
-        println(urlData)
-        url = urlData
-        dataArary()
-    }
-
 
     override fun didEndElement(elementName: String, value: String?, parser: VASTNodeParser?) {
         if (VideoLoader.MEDIAFILE == elementName) {
-            urlData(value.toString())
             println("eeeeeeee")
 
         }

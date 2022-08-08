@@ -8,6 +8,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.vast_ctv_android.Defines
 import com.example.vast_ctv_android.R
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
@@ -20,6 +21,8 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.integralads.omid.iassdk.videoad.base.BaseVideoAd
+import com.integralads.omid.iassdk.videoad.vast.VASTResponse
 import java.net.URLEncoder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -30,8 +33,13 @@ import java.util.regex.Pattern
  */
 
 
-open class VASTActivity : AppCompatActivity(),videoData {
+open class VASTActivity : AppCompatActivity() {
 
+    interface VideoAdListener {
+        fun onVideoAdFailed(videoAd: VASTActivity)
+        fun onVideoAdLoaded(videoAd: String)
+        fun getContentURL(): String?
+    }
     private lateinit var exoPlayerView: PlayerView
     private lateinit var constraintRoot: ConstraintLayout
     private lateinit var simpleExoPlayer: SimpleExoPlayer
@@ -80,12 +88,7 @@ open class VASTActivity : AppCompatActivity(),videoData {
         val extras = intent.extras
         VASTURL = extras?.getString("URL")
 
-        VideoLoader().loadUrl(VASTURL.toString(), this)
-
-
-        videoUrl = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4"
-        findView()
-        initPlayer()
+        loadAd(VASTURL.toString(),this)
 
         if (videoUrl != null) {
             if (isValidURL(videoUrl) ==  false){
@@ -107,6 +110,30 @@ open class VASTActivity : AppCompatActivity(),videoData {
 
     }
 
+    @JvmField
+    var listener: VASTActivity.VideoAdListener? = null
+    protected var videoAdLoader: VideoLoader? = null
+
+
+    fun loadAd(url: String?, context: VASTActivity) {
+        val adUrl = Defines.DEFAULT_NATIVE_VIDEO_AD_URL
+        videoAdLoader = VideoLoader()
+        videoAdLoader?.loadUrl(adUrl.toString(), context , object : VideoLoader.VideoAdLoaderListener {
+            override fun loadedVASTResponse(reponse: VASTResponse?) {
+                videoUrl = reponse?.ads?.get(0).toString()
+                listener?.onVideoAdLoaded(reponse?.ads?.get(0).toString())
+                findView()
+                initPlayer()
+            }
+
+            override fun failedLoadVASTResponse() {
+                adLoadFailed()
+            }
+        })
+    }
+    private fun adLoadFailed() {
+        println("Failed to load ad")
+    }
     // find exoplayerview from XML
     private fun findView() {
         constraintRoot = findViewById(R.id.constraintRoot)
@@ -128,39 +155,39 @@ open class VASTActivity : AppCompatActivity(),videoData {
 
     // Lifecycle
     // when activity started or resumed
-    override fun onResume() {
-        super.onResume()
-        //make video player playable
-        simpleExoPlayer.playWhenReady = true
-        simpleExoPlayer.play()
-    }
-
-    // when activity paused
-    override fun onPause() {
-        super.onPause()
-        simpleExoPlayer.pause()
-        //make video player not playable
-        simpleExoPlayer.playWhenReady = false
-    }
-
-    // when activity stoped
-    override fun onStop() {
-        super.onStop()
-        simpleExoPlayer.pause()
-        //make video player not playable
-        simpleExoPlayer.playWhenReady = false
-    }
-
-    // when activity destroyed
-    override fun onDestroy() {
-        super.onDestroy()
-        //remove listener of an exoplayer
-        simpleExoPlayer.removeListener(playerListner)
-        simpleExoPlayer.stop()
-        simpleExoPlayer.clearMediaItems()
-
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        //make video player playable
+//        simpleExoPlayer.playWhenReady = true
+//        simpleExoPlayer.play()
+//    }
+//
+//    // when activity paused
+//    override fun onPause() {
+//        super.onPause()
+//        simpleExoPlayer.pause()
+//        //make video player not playable
+//        simpleExoPlayer.playWhenReady = false
+//    }
+//
+//    // when activity stoped
+//    override fun onStop() {
+//        super.onStop()
+//        simpleExoPlayer.pause()
+//        //make video player not playable
+//        simpleExoPlayer.playWhenReady = false
+//    }
+//
+//    // when activity destroyed
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        //remove listener of an exoplayer
+//        simpleExoPlayer.removeListener(playerListner)
+//        simpleExoPlayer.stop()
+//        simpleExoPlayer.clearMediaItems()
+//
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+//    }
 
     // Listener for a player and for check the video format and according to video format it's set controls.
     private var playerListner = object : Player.Listener {
@@ -223,12 +250,6 @@ open class VASTActivity : AppCompatActivity(),videoData {
                 )
             }
         }
-
-    }
-
-    override fun urlData(urlData: String) {
-        println("urlData")
-        println(urlData)
 
     }
 
