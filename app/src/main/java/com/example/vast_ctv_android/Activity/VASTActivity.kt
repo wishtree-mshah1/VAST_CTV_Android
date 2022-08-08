@@ -1,13 +1,17 @@
 package com.example.vast_ctv_android.VAST
 
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.view.View
 import android.view.WindowManager
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.ContentLoadingProgressBar
 import com.example.vast_ctv_android.Defines
 import com.example.vast_ctv_android.R
 import com.google.android.exoplayer2.MediaItem
@@ -39,6 +43,7 @@ open class VASTActivity : AppCompatActivity() {
     }
 
     private lateinit var exoPlayerView: PlayerView
+    private lateinit var progressbar: ProgressBar
     private lateinit var constraintRoot: ConstraintLayout
     private lateinit var simpleExoPlayer: SimpleExoPlayer
     private lateinit var mediaSource: MediaSource
@@ -82,7 +87,7 @@ open class VASTActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vastactivity)
-
+        progressbar = findViewById(R.id.progressbar)
         val extras = intent.extras
         VASTURL = extras?.getString("URL")
 
@@ -119,6 +124,7 @@ open class VASTActivity : AppCompatActivity() {
                 //initialize exoPlayer
                 findView()
                 initPlayer()
+                progressbar.setVisibility(View.GONE)
 
                 //start video
                 simpleExoPlayer.playWhenReady = true
