@@ -165,7 +165,7 @@ open class VASTActivity : AppCompatActivity() {
         simpleExoPlayer.prepare()
 
     }
-    
+
     // Listener for a player and for check the video format and according to video format it's set controls.
     private var playerListner = object : Player.Listener {
         override fun onRenderedFirstFrame() {

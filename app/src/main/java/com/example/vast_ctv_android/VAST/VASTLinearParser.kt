@@ -1,10 +1,13 @@
 package com.example.vast_ctv_android.VAST
 
-import com.integralads.omid.iassdk.videoad.vast.VASTResponse
+
 import org.xmlpull.v1.XmlPullParser
 import java.text.ParseException
 import java.text.SimpleDateFormat
 
+/**
+ * Created by Manav Shah on 07/08/22
+ */
 class VASTLinearParser : VASTAdMediaDataParser() {
     //obj of LinearAdMediaData class who have variables to store value
     val adData = LinearAdMediaData()

@@ -15,12 +15,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
 
-/**
- * Below declared class VastParsing is for
- * And VastParsing class have ______ methods for a ______
- * class VastParsing extends class for a
- **/
-
 
 /**
  * Created by Manav Shah on 05/08/22 - 15: 34: 31.

@@ -2,7 +2,9 @@ package com.example.vast_ctv_android.VAST
 
 import com.integralads.omid.iassdk.videoad.vast.VASTResponse
 import org.xmlpull.v1.XmlPullParser
-
+/**
+ * Created by Manav Shah on 26/07/22
+ */
 class VASTResponseParser : VASTBaseParser() {
     val response = VASTResponse()
     override fun createParser(elementName: String, parser: XmlPullParser?): VASTNodeParser? {
