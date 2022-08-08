@@ -124,6 +124,8 @@ open class VASTActivity : AppCompatActivity() {
                 listener?.onVideoAdLoaded(reponse?.ads?.get(0).toString())
                 findView()
                 initPlayer()
+                simpleExoPlayer.playWhenReady = true
+                simpleExoPlayer.play()
             }
 
             override fun failedLoadVASTResponse() {
