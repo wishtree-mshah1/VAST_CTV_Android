@@ -28,7 +28,7 @@ import java.nio.charset.Charset
 
 
 
-class VideoLoader(): VASTBaseParser() {
+class VideoLoader() {
     interface VideoAdLoaderListener {
         fun loadedVASTResponse(reponse: VASTResponse?)
         fun failedLoadVASTResponse()
@@ -49,7 +49,6 @@ class VideoLoader(): VASTBaseParser() {
         homeActivity: VASTActivity
     ) {
         //RequestQueue initialized
-
         mRequestQueue = Volley.newRequestQueue(homeActivity)
 
         //String Request initialized
@@ -82,6 +81,7 @@ class VideoLoader(): VASTBaseParser() {
     private inner class VASTParserAsyncTask : AsyncTask<String?, Void?, VASTResponse?>() {
         protected override fun doInBackground(vararg params: String?): VASTResponse? {
             return try {
+                // send URL to parse function
                 params[0]?.let { parse(it) }
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -90,9 +90,8 @@ class VideoLoader(): VASTBaseParser() {
         }
 
         override fun onPostExecute(response: VASTResponse?) {
+            //call handleVASTResponse for get and handle the response
             handleVASTResponse(response)
-            println("response?.ads?.get(0)")
-            println(response?.ads?.get(0))
 
         }
     }
@@ -147,26 +146,6 @@ class VideoLoader(): VASTBaseParser() {
             eventType = parser.next()
         }
 
-    }
-
-    override fun createParser(elementName: String, parser: XmlPullParser?): VASTNodeParser? {
-        if (VideoLoader.MEDIAFILE == elementName) {
-            println("URL GOT")
-        }
-        return null
-    }
-
-
-    override fun didEndElement(elementName: String, value: String?, parser: VASTNodeParser?) {
-        if (VideoLoader.MEDIAFILE == elementName) {
-            println("eeeeeeee")
-
-        }
-
-    }
-
-    companion object {
-        private const val MEDIAFILE = "MediaFile"
     }
 
 }

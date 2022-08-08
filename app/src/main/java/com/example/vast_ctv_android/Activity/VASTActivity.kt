@@ -36,10 +36,9 @@ import java.util.regex.Pattern
 open class VASTActivity : AppCompatActivity() {
 
     interface VideoAdListener {
-        fun onVideoAdFailed(videoAd: VASTActivity)
         fun onVideoAdLoaded(videoAd: String)
-        fun getContentURL(): String?
     }
+
     private lateinit var exoPlayerView: PlayerView
     private lateinit var constraintRoot: ConstraintLayout
     private lateinit var simpleExoPlayer: SimpleExoPlayer
@@ -88,19 +87,9 @@ open class VASTActivity : AppCompatActivity() {
         val extras = intent.extras
         VASTURL = extras?.getString("URL")
 
+        // call loadAd loadAd function for VAST parsing
         loadAd(VASTURL.toString(),this)
 
-        if (videoUrl != null) {
-            if (isValidURL(videoUrl) ==  false){
-                Toast.makeText(this@VASTActivity, "URL is not in proper format", Toast.LENGTH_SHORT).show()
-            }
-            else{
-
-            }
-        }
-        else{
-            Toast.makeText(this@VASTActivity, "Don't have playable URL", Toast.LENGTH_SHORT).show()
-        }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -119,13 +108,35 @@ open class VASTActivity : AppCompatActivity() {
         val adUrl = Defines.DEFAULT_NATIVE_VIDEO_AD_URL
         videoAdLoader = VideoLoader()
         videoAdLoader?.loadUrl(adUrl.toString(), context , object : VideoLoader.VideoAdLoaderListener {
+
+            //override loadedVASTResponse from VideoAdLoaderListener to get response value
             override fun loadedVASTResponse(reponse: VASTResponse?) {
-                videoUrl = reponse?.ads?.get(0).toString()
+
                 listener?.onVideoAdLoaded(reponse?.ads?.get(0).toString())
+
+                //set response value to a videourl variable
+                videoUrl = reponse?.ads?.get(0).toString()
+
+                //initialize exoPlayer
                 findView()
                 initPlayer()
+
+                //start video
                 simpleExoPlayer.playWhenReady = true
                 simpleExoPlayer.play()
+
+                //check URL is valid or not
+                if (videoUrl != null) {
+                    if (isValidURL(videoUrl) ==  false){
+                        Toast.makeText(this@VASTActivity, "URL is not in proper format", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+
+                    }
+                }
+                else{
+                    Toast.makeText(this@VASTActivity, "Don't have playable URL", Toast.LENGTH_SHORT).show()
+                }
             }
 
             override fun failedLoadVASTResponse() {
@@ -154,43 +165,7 @@ open class VASTActivity : AppCompatActivity() {
         simpleExoPlayer.prepare()
 
     }
-
-    // Lifecycle
-    // when activity started or resumed
-//    override fun onResume() {
-//        super.onResume()
-//        //make video player playable
-//        simpleExoPlayer.playWhenReady = true
-//        simpleExoPlayer.play()
-//    }
-//
-//    // when activity paused
-//    override fun onPause() {
-//        super.onPause()
-//        simpleExoPlayer.pause()
-//        //make video player not playable
-//        simpleExoPlayer.playWhenReady = false
-//    }
-//
-//    // when activity stoped
-//    override fun onStop() {
-//        super.onStop()
-//        simpleExoPlayer.pause()
-//        //make video player not playable
-//        simpleExoPlayer.playWhenReady = false
-//    }
-//
-//    // when activity destroyed
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        //remove listener of an exoplayer
-//        simpleExoPlayer.removeListener(playerListner)
-//        simpleExoPlayer.stop()
-//        simpleExoPlayer.clearMediaItems()
-//
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-//    }
-
+    
     // Listener for a player and for check the video format and according to video format it's set controls.
     private var playerListner = object : Player.Listener {
         override fun onRenderedFirstFrame() {

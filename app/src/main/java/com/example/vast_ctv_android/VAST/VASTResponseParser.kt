@@ -15,12 +15,11 @@ class VASTResponseParser : VASTBaseParser() {
     }
 
     override fun didEndElement(elementName: String, value: String?, parser: VASTNodeParser?) {
+        // add Mediafile URL in VASTResponse's ads array
         response.ads.add(value.toString())
-        println("yes")
     }
 
     companion object {
-        private const val AD = "Ad"
         private const val MEDIA_FILE = "MediaFile"
     }
 }

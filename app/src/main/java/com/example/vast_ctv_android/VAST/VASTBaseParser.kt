@@ -11,9 +11,12 @@ abstract class VASTBaseParser : VASTNodeParser {
     private var currentElement: String? = null
     private var currentParser: VASTNodeParser? = null
     override fun didStartElement(elementName: String, parser: XmlPullParser?) {
+        //if currentParser variable is not null
         if (currentParser != null) {
             currentParser?.didStartElement(elementName, parser)
-        } else {
+        }
+        // if null it's create a parser and call abstract function
+        else {
             currentParser = createParser(elementName, parser)
             currentElement = if (currentParser != null) elementName else null
         }
@@ -21,8 +24,10 @@ abstract class VASTBaseParser : VASTNodeParser {
 
     override fun didEndElement(elementName: String, value: String?) {
 //        didEndElement(elementName, value, currentParser)
+        //for check the currentelement variable have same value as elementName
         if (currentElement != null && currentElement == elementName) {
             didEndElement(elementName, value, currentParser)
+            //after one time of parsing the currentParser and currentElement has to be a null for next tag parsing
             currentParser = null
             currentElement = null
         } else if (currentParser != null) {

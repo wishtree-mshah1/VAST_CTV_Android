@@ -4,17 +4,6 @@ import com.example.vast_ctv_android.VAST.LinearAdMediaData
 import java.util.*
 
 class VASTResponse {
+    // store response or data of XML file in this currently it's store only mediaFile data means only video url
     val ads: ArrayList<String> = ArrayList()
-    fun needLoadWrapper(): Boolean {
-        return getAdData() != null
-    }
-
-    fun getWrapperVASTUrl(): String?{
-        return LinearAdMediaData().videoUrl
-    }
-
-    fun getAdData(): String? {
-
-        return if (LinearAdMediaData().videoUrl != null) LinearAdMediaData().videoUrl else null
-    }
 }
