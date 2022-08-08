@@ -21,7 +21,6 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.integralads.omid.iassdk.videoad.base.BaseVideoAd
 import com.integralads.omid.iassdk.videoad.vast.VASTResponse
 import java.net.URLEncoder
 import java.util.regex.Matcher
