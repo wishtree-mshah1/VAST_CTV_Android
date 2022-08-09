@@ -1,7 +1,6 @@
 package com.example.vast_ctv_android.VAST
 
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -11,7 +10,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.ContentLoadingProgressBar
 import com.example.vast_ctv_android.Defines
 import com.example.vast_ctv_android.R
 import com.google.android.exoplayer2.MediaItem
@@ -65,7 +63,7 @@ open class VASTActivity : AppCompatActivity() {
                 "(#([-\\w~!$+|.,*:=]|%[a-f\\d]{2})*)?\\b"+"mp4"
 
         // Compile the ReGex
-        val p: Pattern = Pattern.compile(regex)
+        val pattern: Pattern = Pattern.compile(regex)
 
         // If the string is empty
         // return false
@@ -76,7 +74,7 @@ open class VASTActivity : AppCompatActivity() {
         // Find match between given string
         // and regular expression
         // using Pattern.matcher()
-        val m: Matcher = p.matcher(url)
+        val m: Matcher = pattern.matcher(url)
 
         // Return if the string
         // matched the ReGex
@@ -150,7 +148,8 @@ open class VASTActivity : AppCompatActivity() {
         })
     }
     private fun adLoadFailed() {
-        println("Failed to load ad")
+        val toast = Toast.makeText(applicationContext, "Failed to load ad", Toast.LENGTH_SHORT)
+        toast.show()
     }
     // find exoplayerview from XML
     private fun findView() {

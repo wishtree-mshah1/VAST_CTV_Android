@@ -51,10 +51,9 @@ class VideoLoader() {
             { response ->
 
                 try {
-                    val a = parse(DEFAULT_NATIVE_VIDEO_AD_URL)
-                    val b = VASTParserAsyncTask()
-                    b.execute(response)
-                    println(b)
+                    val parse = parse(DEFAULT_NATIVE_VIDEO_AD_URL)
+                    val parsing = VASTParserAsyncTask()
+                    parsing.execute(response)
 
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -127,7 +126,7 @@ class VideoLoader() {
                 XmlPullParser.END_TAG -> {
                     //one by one get value with there tag name
                     responseParser.didEndElement(tagname, buffer!!)
-                    println(buffer)
+
                     if (tagname == "MediaFile") {
 
                     }
