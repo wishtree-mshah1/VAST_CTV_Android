@@ -20,7 +20,7 @@
             android:layout_margin="@dimen/card_inner_margin">
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationView"
-                android:layout_width="@dimen/zero_dp"
+                android:layout_width="@dimen/animation_width"
                 android:layout_height="wrap_content"
                 app:lottie_rawRes="@raw/animation"
                 app:lottie_autoPlay="true"

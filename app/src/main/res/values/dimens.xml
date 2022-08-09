@@ -4,5 +4,6 @@
     <dimen name="card_radius">20dp</dimen>
     <dimen name="card_inner_margin">15dp</dimen>
     <dimen name="zero_dp">0dp</dimen>
+    <dimen name="animation_width">320dp</dimen>
     <dimen name="left_right_margin">10dp</dimen>
 </resources>
