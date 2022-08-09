@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_margin">35dp</dimen>
+    <dimen name="card_radius">20dp</dimen>
+    <dimen name="card_inner_margin">15dp</dimen>
+    <dimen name="zero_dp">0dp</dimen>
+    <dimen name="animation_width">320dp</dimen>
+    <dimen name="left_right_margin">10dp</dimen>
+</resources>
